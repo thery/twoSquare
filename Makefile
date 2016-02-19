@@ -50,10 +50,10 @@ vo_to_obj = $(addsuffix .o,\
 ##########################
 
 COQLIBS?=\
-  -R "." Top\
+  -R "." mathcomp.sum_of_two_square\
   -I "."
 COQDOCLIBS?=\
-  -R "." Top
+  -R "." mathcomp.sum_of_two_square
 
 ##########################
 #                        #
@@ -186,22 +186,22 @@ userinstall:
 
 install:
 	cd "." && for i in $(VOFILES) $(VFILES) $(GLOBFILES) $(NATIVEFILES) $(CMOFILES) $(CMIFILES) $(CMAFILES); do \
-	 install -d "`dirname "$(DSTROOT)"$(COQLIBINSTALL)/Top/$$i`"; \
-	 install -m 0644 $$i "$(DSTROOT)"$(COQLIBINSTALL)/Top/$$i; \
+	 install -d "`dirname "$(DSTROOT)"$(COQLIBINSTALL)/mathcomp/sum_of_two_square/$$i`"; \
+	 install -m 0644 $$i "$(DSTROOT)"$(COQLIBINSTALL)/mathcomp/sum_of_two_square/$$i; \
 	done
 
 install-doc:
-	install -d "$(DSTROOT)"$(COQDOCINSTALL)/Top/html
+	install -d "$(DSTROOT)"$(COQDOCINSTALL)/mathcomp/sum_of_two_square/html
 	for i in html/*; do \
-	 install -m 0644 $$i "$(DSTROOT)"$(COQDOCINSTALL)/Top/$$i;\
+	 install -m 0644 $$i "$(DSTROOT)"$(COQDOCINSTALL)/mathcomp/sum_of_two_square/$$i;\
 	done
 
 uninstall_me.sh: Makefile
 	echo '#!/bin/sh' > $@
-	printf 'cd "$${DSTROOT}"$(COQLIBINSTALL)/Top && rm -f $(VOFILES) $(VFILES) $(GLOBFILES) $(NATIVEFILES) $(CMOFILES) $(CMIFILES) $(CMAFILES) && find . -type d -and -empty -delete\ncd "$${DSTROOT}"$(COQLIBINSTALL) && find "Top" -maxdepth 0 -and -empty -exec rmdir -p \{\} \;\n' >> "$@"
-	printf 'cd "$${DSTROOT}"$(COQDOCINSTALL)/Top \\\n' >> "$@"
+	printf 'cd "$${DSTROOT}"$(COQLIBINSTALL)/mathcomp/sum_of_two_square && rm -f $(VOFILES) $(VFILES) $(GLOBFILES) $(NATIVEFILES) $(CMOFILES) $(CMIFILES) $(CMAFILES) && find . -type d -and -empty -delete\ncd "$${DSTROOT}"$(COQLIBINSTALL) && find "mathcomp/sum_of_two_square" -maxdepth 0 -and -empty -exec rmdir -p \{\} \;\n' >> "$@"
+	printf 'cd "$${DSTROOT}"$(COQDOCINSTALL)/mathcomp/sum_of_two_square \\\n' >> "$@"
 	printf '&& rm -f $(shell find "html" -maxdepth 1 -and -type f -print)\n' >> "$@"
-	printf 'cd "$${DSTROOT}"$(COQDOCINSTALL) && find Top/html -maxdepth 0 -and -empty -exec rmdir -p \{\} \;\n' >> "$@"
+	printf 'cd "$${DSTROOT}"$(COQDOCINSTALL) && find mathcomp/sum_of_two_square/html -maxdepth 0 -and -empty -exec rmdir -p \{\} \;\n' >> "$@"
 	chmod +x $@
 
 uninstall: uninstall_me.sh
