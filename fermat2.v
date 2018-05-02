@@ -50,7 +50,7 @@ Lemma sum2sGP x :
 Proof.
 apply: (iffP idP) => [/sum2sP[m [n ->]]|[x1->]].
 exists (m%:R + iGI * n%:R)%R.
-  by rewrite normGIE /= !algGI_nat algRe_rect ?algIm_rect 
+  by rewrite normGIE /= !algGI_nat Re_rect ?Im_rect 
              ?CrealE ?conjC_nat ?natCK // !normr_nat !natCK.
 rewrite normGIE; set m := truncC _; set n := truncC _.
 by apply/sum2sP; exists m; exists n.
@@ -83,30 +83,30 @@ have PGIp : primeGI (p%:R).
  by apply: dvdGI_eq_norm (pdivGI_dvd _).
 pose z := (a%:R + iGI * b%:R)%R.
 have F : ('N z)%GI = a ^ 2 + b ^ 2.
-  by rewrite normGIE /= !algGI_nat !(algRe_rect, algIm_rect)
+  by rewrite normGIE /= !algGI_nat !(Re_rect, Im_rect)
             ?Creal_Cnat // !normr_nat !natCK.
 have F1 : (p%:R %| z * conjGI z)%GI%R.
   rewrite conjGIM_norm F.
   case/dvdnP: pDab => q1 ->.
   by apply/dvdGIP; exists (q1%:R); rewrite natrM.
 have []: ~ (p %| gcdn a b).
-  by case/eqP: Cab => ->; rewrite Euclid_dvd1.
+  by rewrite (eqP Cab) Euclid_dvd1.
 rewrite dvdn_gcd.
 have [F2|] := boolP (p%:R %| z)%GI.
   have := dvdGI_nat_dvdz_Re F2.
-  rewrite algRe_rect /= algGI_nat ?Creal_Cnat //=
+  rewrite Re_rect /= algGI_nat ?Creal_Cnat //=
            (intCK (Posz a)) /= => ->.
   have := dvdGI_nat_dvdz_Im F2.
-  by rewrite algIm_rect /= algGI_nat ?Creal_Cnat //=
+  by rewrite Im_rect /= algGI_nat ?Creal_Cnat //=
            (intCK (Posz b)).
 rewrite -primeGI_coprime // => HH.
 have F2 : (p%:R %| conjGI z)%GI.
   by rewrite -(Gauss_dvdGIr _ HH).
 have := dvdGI_nat_dvdz_Re F2.
-rewrite algRe_conj algRe_rect /= algGI_nat ?Creal_Cnat //=
+rewrite Re_conj Re_rect /= algGI_nat ?Creal_Cnat //=
            (intCK (Posz a)) => ->.
 have := dvdGI_nat_dvdz_Im F2.
-rewrite algIm_conj algIm_rect /= algGI_nat ?Creal_Cnat //=.
+rewrite Im_conj Im_rect /= algGI_nat ?Creal_Cnat //=.
 by rewrite floorCN ?Cint_Cnat // abszN (intCK (Posz b)).
 Qed.
 

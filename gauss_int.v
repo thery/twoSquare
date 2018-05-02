@@ -39,7 +39,7 @@ Qed.
 Lemma algReM (x y : algC) : 
   'Re (x * y) = 'Re x * 'Re y - 'Im x * 'Im y.
 Proof.
-rewrite {1}[x]algCrect {1}[y]algCrect mulC_rect algRe_rect //;
+rewrite {1}[x]algCrect {1}[y]algCrect mulC_rect Re_rect //;
 by rewrite rpredD ?rpredN // rpredM // ?Creal_Re ?Creal_Im.
 Qed.
 
@@ -48,7 +48,7 @@ Qed.
 *)
 Lemma algImM (x y : algC) : 'Im (x * y) = 'Re x * 'Im y + 'Re y * 'Im x.
 Proof.
-rewrite {1}[x]algCrect {1}[y]algCrect mulC_rect algIm_rect //;
+rewrite {1}[x]algCrect {1}[y]algCrect mulC_rect Im_rect //;
 by rewrite rpredD ?rpredN // rpredM // ?Creal_Re ?Creal_Im.
 Qed.
 
@@ -62,7 +62,7 @@ rewrite -{1}[_ ^-1]mul1r -H -mulrA -invfM.
 rewrite {1}[x]algCrect conjC_rect ?Creal_Re ?Creal_Im //.
 have F : (x^* * x)^-1 \is Creal.
   by rewrite rpredV CrealE rmorphM conjCK mulrC.
-rewrite mulrBl -mulrN -['i * _ * _]mulrA algRe_rect ?normCKC //.
+rewrite mulrBl -mulrN -['i * _ * _]mulrA Re_rect ?normCKC //.
   by rewrite rpredM ?Creal_Re.
 by rewrite mulrN rpredN rpredM  // Creal_Im.
 Qed.
@@ -77,7 +77,7 @@ rewrite -{1}[_ ^-1]mul1r -H -mulrA -invfM.
 rewrite {1}[x]algCrect conjC_rect ?Creal_Re ?Creal_Im //.
 have F : (x^* * x)^-1 \is Creal.
   by rewrite rpredV CrealE rmorphM conjCK mulrC.
-rewrite mulrBl -mulrN -['i * _ * _]mulrA algIm_rect ?normCKC //.
+rewrite mulrBl -mulrN -['i * _ * _]mulrA Im_rect ?normCKC //.
 - by rewrite mulrN.
 - by rewrite rpredM ?Creal_Re.
 by rewrite mulrN rpredN rpredM  // Creal_Im.
@@ -110,9 +110,7 @@ Lemma cdiv0z y : (0 %c/ y)%Z = 0.
 Proof.  by rewrite /cdivz div0z mod0z mulr0 normr_ge0 orbT. Qed.
 
 Lemma cdivz1 x : (x %c/ 1)%Z = x.
-Proof. 
-by rewrite /cdivz oner_eq0 divn1 modz1 normr1 mulr0.
-Qed.
+Proof. by rewrite /cdivz oner_eq0 divz1 modz1 normr1 mulr0. Qed.
 
 Lemma cdivzz x : x != 0 -> (x %c/ x)%Z = 1.
 Proof. 
@@ -314,7 +312,7 @@ Canonical GI_comUnitRingType := [comUnitRingType of GI].
 
 *)
 Lemma conjGIE x : (x^* \is a gaussInteger) = (x \is a gaussInteger).
-Proof. by rewrite ![_ \is a _]qualifE algRe_conj algIm_conj rpredN. Qed.
+Proof. by rewrite ![_ \is a _]qualifE Re_conj Im_conj rpredN. Qed.
 (**
 
 We use this fact to build the conjugation of a gauss Integers
@@ -448,7 +446,7 @@ Lemma normGI_eq1 (x : GI) : ('N(x) == 1)%N = (val x \in [::1;-1;'i;-'i]).
 Proof.
 apply/idP/idP; last first.
   by rewrite normGIE !inE => /or4P[] /eqP->;
-     rewrite ?raddfN /= ?(Creal_ReP 1 _) ?(Creal_ImP 1 _) ?algRe_i ?algIm_i //=
+     rewrite ?raddfN /= ?(Creal_ReP 1 _) ?(Creal_ImP 1 _) ?Re_i ?Im_i //=
           ?normrN ?normr1 ?normr0 ?truncC0 ?truncC1.
 rewrite  [val x]algCrect normGIE.
 have /andP[/truncC_Cint {2}-> /truncC_Cint {2}->] := algGIP x.
@@ -470,16 +468,16 @@ Qed.
 Lemma unitGIE (x : GI) : (x \in GRing.unit) =
  (val x \in 4.-unity_root).
 Proof.
-have eq_algC a b : (a == b) = ('Re a == 'Re b) && ('Im a == 'Im b).
+have eq_algC (a b : algC) : (a == b) = ('Re a == 'Re b) && ('Im a == 'Im b).
   rewrite {1}[a]algCrect {1}[b]algCrect -subr_eq0 opprD addrACA -mulrBr.
   rewrite -normr_eq0 -sqrf_eq0 normC2_rect ?rpredB ?Creal_Re ?Creal_Im //.
   rewrite paddr_eq0 ?real_exprn_even_ge0 // ?rpredB ?Creal_Re ?Creal_Im //.
   by rewrite !expf_eq0 /= !subr_eq0.
 have N1Creal : -1 \is Creal by rewrite rpredN.
-have oneE :    1 = 1 + 'i * 0     by rewrite mulr0 addr0.
-have N1E  :  - 1 = - 1 + 'i * 0   by rewrite mulr0 addr0.
-have iE   :   'i = 0 + 'i * 1     by rewrite mulr1 add0r.
-have NiE  : - 'i = 0 + 'i * (- 1) by rewrite mulrN1 add0r.
+have oneE :    1 = 1 + 'i * 0 :> algC by rewrite mulr0 addr0.
+have N1E  :  - 1 = - 1 + 'i * 0 :> algC by rewrite mulr0 addr0.
+have iE   :   'i = 0 + 'i * 1 :> algC by rewrite mulr1 add0r.
+have NiE  : - 'i = 0 + 'i * (- 1) :> algC by rewrite mulrN1 add0r.
 have onerN1 : (1 == -1 :> algC) = false.
   by rewrite -subr_eq0 opprK paddr_eq0 ?oner_eq0 ?ler01.
 pose my := @id algC.
@@ -493,21 +491,21 @@ rewrite (@mem_unity_roots _ 4 (map my [:: 1; -1; 'i; -'i])) //; last 2 first.
   by rewrite -[4]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
 - rewrite /= ![my _](iE, oneE, N1E, NiE).
   rewrite /= !in_cons !in_nil /= !negb_or -!andbA !andbT /=.
-  rewrite ![_ + 'i * _ == _]eq_algC ?algRe_rect ?algIm_rect //.
+  rewrite ![_ + 'i * _ == _]eq_algC ?Re_rect ?Im_rect //.
   rewrite ![_ == -1]eq_sym ![_ == 1]eq_sym oppr_eq0.
   by rewrite eqxx onerN1 oner_eq0.
 rewrite gaussNormE [val x]algCrect normC2_rect ?Creal_Re ?Creal_Im //.
 rewrite Cnat_add_eq1 ?Cnat_exp_even ?expf_eq0 //=.
-rewrite -Cint_normK // -Cint_normK //.
+rewrite -Cint_normK // -['Im _ ^+ 2]Cint_normK //.
 rewrite !expr2 !Cnat_mul_eq1 ?andbb ?Cnat_norm_Cint //.
 rewrite !real_eqr_norml ?Creal_Re ?Creal_Im ?ler01 ?andbT //=.
 rewrite !inE ![my _](iE, oneE, N1E, NiE).
 rewrite ![_ + 'i * _ == _]eq_algC
-   ?algRe_rect ?algIm_rect // ?Creal_Re ?Creal_Im //.
+   ?Re_rect ?Im_rect // ?Creal_Re ?Creal_Im //.
 by rewrite andb_orl andb_orr -orbA.
 Qed.
 
-Lemma algC_eqE  x y : (x == y) = (('Re x == 'Re y) && ('Im x == 'Im y)).
+Lemma algC_eqE (x y : algC) : (x == y) = (('Re x == 'Re y) && ('Im x == 'Im y)).
 Proof.
 apply/eqP/andP=> [->//|[/eqP H1 /eqP H2]].
 by rewrite [x]algCrect H1 H2 -algCrect.
@@ -521,9 +519,9 @@ rewrite (@mem_unity_roots _ 4 (map id [:: 1; -1; 'i; -'i])) //.
   by rewrite -[4]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
 rewrite /= !in_cons !in_nil /= !negb_or -!andbA !andbT /= eqr_opp.
 rewrite -addr_eq0 (eqC_nat 2 0) andTb.
-rewrite algC_eqE (Creal_ImP _ _) // algIm_i (eqC_nat 0 1) andbF andTb.
-rewrite algC_eqE raddfN (Creal_ReP _ _) //= algRe_i oppr0 (eqC_nat 1 0) andFb andTb.
-rewrite algC_eqE !raddfN /= (Creal_ImP _ _) // algIm_i oppr0 (eqC_nat 0 1) andbF andTb.
+rewrite algC_eqE (Creal_ImP _ _) // Im_i (eqC_nat 0 1) andbF andTb.
+rewrite algC_eqE raddfN (Creal_ReP _ _) //= Re_i oppr0 (eqC_nat 1 0) andFb andTb.
+rewrite algC_eqE !raddfN /= (Creal_ImP _ _) // Im_i oppr0 (eqC_nat 0 1) andbF andTb.
 by rewrite -addr_eq0 (@mulrn_eq0 _ 'i 2) negb_or neq0Ci.
 Qed.
 
@@ -537,7 +535,7 @@ Canonical GI_idomainType :=
   Eval hnf in IdomainType GI GI_idomainAxiom.
 
 Fact divGI_subproof (x y : int) : x%:~R + 'i * y%:~R \is a gaussInteger.
-Proof. by rewrite qualifE /= algRe_rect ?algIm_rect ?Creal_Cint ?Cint_int. Qed.
+Proof. by rewrite qualifE /= Re_rect ?Im_rect ?Creal_Cint ?Cint_int. Qed.
 
 Definition divGI (x y : GI) : GI :=
   let zr := floorC ('Re (val x) * 'Re (val y) + 'Im (val x) * 'Im (val y)) in
@@ -739,10 +737,10 @@ Qed.
 Lemma dvdGI_nat_dvdz_Re n x :
   n%:R %| x -> (n %| `|floorC ('Re (algGI x))|)%N.
 Proof.
-case/dvdGIP=> q /val_eqP/eqP/(congr1 algRe) /=.
+case/dvdGIP=> q /val_eqP/eqP /(congr1 (fun x => Re x)) /=.
 case: x => /= ax; rewrite qualifE => /andP[Rx Ix].
 case: q => /= aq; rewrite qualifE => /andP[Rq Iq].
-rewrite [aq]algCrect mulrDl -mulrA algGI_nat algRe_rect; last 2 first.
+rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Re_rect; last 2 first.
   by rewrite rpredM // Creal_Cint // Cint_Cnat.
   by rewrite rpredM // Creal_Cint // Cint_Cnat.
 move=> /(congr1 Num.norm) /eqP.
@@ -755,10 +753,10 @@ Qed.
 Lemma dvdGI_nat_dvdz_Im n x :
   n%:R %| x -> (n %| `|floorC ('Im (algGI x))|)%N.
 Proof.
-case/dvdGIP=> q /val_eqP/eqP/(congr1 algIm) /=.
+case/dvdGIP=> q /val_eqP/eqP/(congr1 (fun x => Im x)) /=.
 case: x => /= ax; rewrite qualifE => /andP[Rx Ix].
 case: q => /= aq; rewrite qualifE => /andP[Rq Iq].
-rewrite [aq]algCrect mulrDl -mulrA algGI_nat algIm_rect; last 2 first.
+rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Im_rect; last 2 first.
   by rewrite rpredM // Creal_Cint // Cint_Cnat.
   by rewrite rpredM // Creal_Cint // Cint_Cnat.
 move=> /(congr1 Num.norm) /eqP.
@@ -775,7 +773,7 @@ by rewrite rmorphM.
 Qed.
 
 Fact iGI_proof : 'i \is a gaussInteger.
-Proof. by rewrite qualifE algRe_i algIm_i Cint0 Cint1. Qed.
+Proof. by rewrite qualifE Re_i Im_i Cint0 Cint1. Qed.
 
 Definition iGI := GIof iGI_proof.
 
@@ -783,7 +781,7 @@ Lemma dvdGI_norm_even x :  ~~ odd ('N x) = ((1 + iGI) %| x).
 Proof.
 apply/idP/idP => [Ex|/dvdGIP[u ->]]; last first.
   rewrite normGIM {2}/normGI gaussNormE normC2_Re_Im.
-  rewrite !raddfD /= algRe_i algIm_i (Creal_ReP _ _) // (Creal_ImP _ _) //.
+  rewrite !raddfD /= Re_i Im_i (Creal_ReP _ _) // (Creal_ImP _ _) //.
   by rewrite add0r addr0 expr1n (natCK 2) odd_mul negb_and orbT.
 apply/dvdGIP.
 have := algGIP x; rewrite qualifE => / andP[].
@@ -796,7 +794,7 @@ suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInteger.
   rewrite -addrA [_ + (_ - _)]addrC subrK.
   have F u : (u * 2%:R = u + u) by rewrite mulrDr mulr1.
   by rewrite -!F !mulfK 1?[algGI x]algCrect ?(eqC_nat _ 0).
-rewrite qualifE algRe_rect ?algIm_rect; last 4 first.
+rewrite qualifE Re_rect ?Im_rect; last 4 first.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Creal_Cint.
 - by rewrite !(rpredM, rpredV) 1? rpredB ?rpredD ?Creal_Cint.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Creal_Cint.
@@ -1289,11 +1287,11 @@ Proof.
 rewrite pmap_sub_uniq // map_inj_in_uniq ?enum_uniq //.
 move=> /= [x1 x2] [y1 y2] _ _  /val_eqP /eqP /= H.
 congr (_ , _); apply/eqP.
-  have /eqP := congr1 algRe H.
-  rewrite !algRe_rect ?rpredB ?Creal_Cnat ?algGI_nat //.
+  have /eqP := congr1 (fun x => Re x) H.
+  rewrite !Re_rect ?rpredB ?Creal_Cnat ?algGI_nat //.
   by rewrite - subr_eq0 opprB addrA subrK subr_eq0 eqC_nat.
-have /eqP := congr1 algIm H.
-rewrite !algIm_rect ?rpredB ?Creal_Cnat ?algGI_nat //.
+have /eqP := congr1 (fun x => Im x) H.
+rewrite !Im_rect ?rpredB ?Creal_Cnat ?algGI_nat //.
 by rewrite - subr_eq0 opprB addrA subrK subr_eq0 eqC_nat.
 Qed.
 
