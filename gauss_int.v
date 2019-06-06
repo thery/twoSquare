@@ -1776,7 +1776,7 @@ Qed.
 
 Lemma logGIX p x n : logGI p (x ^+ n) = (n * logGI p x)%N.
 Proof.
-have [Pp|/negPf PnP] := boolP (primeGI p); last by rewrite /logGI PnP.
+have [Pp|/negPf PnP] := boolP (primeGI p); last by rewrite /logGI PnP muln0.
 elim: n => [|n IHn]; first by rewrite logGI1.
 have [/eqP->|nZx] := boolP (x == 0); first by rewrite expr0n logGI0 muln0.
 by rewrite exprS logGIM  ?IHn // expf_eq0 // negb_and nZx orbT.

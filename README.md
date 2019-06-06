@@ -2,7 +2,7 @@
 
 A proof of Fermat's theorem on sum of two squares.
 It is the proof that uses gaussian integers. This is done in ssreflect.
-It contains two file :
+It contains two files :
 
 ================================
 
@@ -24,6 +24,3 @@ sum2stest :
   reflect
   (forall p,  prime p -> odd p -> p %| n -> odd (logn p n) -> p %% 4 = 1)
   (n \is a sum_of_two_square).
-
-
-
