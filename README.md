@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/thery/twoSquare.svg?branch=master)](https://travis-ci.org/thery/twoSquare)
+
+
 # Two Square
 
 A proof of Fermat's theorem on sum of two squares.
