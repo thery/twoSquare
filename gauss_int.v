@@ -214,7 +214,7 @@ Record GI := GIof {
   algGI : algC;
   algGIP : algGI \is a gaussInteger }.
 (** We make the defining property of GI a Hint *)
-Hint Resolve algGIP.
+Hint Resolve algGIP : core.
 (**
 
 We provide the subtype property.
@@ -231,10 +231,10 @@ Lemma GIRe (x : GI) : 'Re (val x) \in Cint.
 Proof. by have /andP [] := algGIP x. Qed.
 Lemma GIIm (x : GI) : 'Im (val x) \in Cint.
 Proof. by have /andP [] := algGIP x. Qed.
-Hint Resolve GIRe GIIm.
+Hint Resolve GIRe GIIm : core.
 
 Canonical ReGI x := GIof (Cint_GI (GIRe x)).
-Canonical ImGI x := GIof (Cint_GI (GIIm x)).
+Definition ImGI x := GIof (Cint_GI (GIIm x)).
 (**
 
 We provide a ring structure to the type GI, using the subring
@@ -366,9 +366,9 @@ Proof. by rewrite normCK. Qed.
 *)
 Lemma gaussNormCnat (x : GI) : gaussNorm (val x) \in Cnat.
 Proof. by rewrite /gaussNorm -normCK normC2_Re_Im rpredD // Cnat_exp_even. Qed.
-Hint Resolve gaussNormCnat.
+Hint Resolve gaussNormCnat : core.
 
-
+Declare Scope GI_scope.
 Delimit Scope GI_scope with GI.
 
 Open Scope GI_scope.
@@ -1855,6 +1855,7 @@ Qed.
 
 End GaussIntegers.
 
+Declare Scope GI_scope.
 Delimit Scope GI_scope with GI.
 
 Notation "'N x" := (normGI x%R) (at level 10) : GI_scope.
