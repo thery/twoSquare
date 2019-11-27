@@ -7,13 +7,13 @@ A proof of Fermat's theorem on sum of two squares.
 It is the proof that uses gaussian integers. This is done in ssreflect.
 It contains two files :
 
-================================
+********************************
 
 gauss_int.v : the definition of gaussian integers
 
 fermar2.v : the proof of Fermat's theorem
 
-================================
+********************************
 
 The final statement reads:
 
