@@ -174,7 +174,7 @@ move=> Op Pp; apply/idP/idP=>[/sum2sP[a [b H]]|pM4].
     by move: (c %% 4) (ltn_pmod c (isT: 0 < 4)); do 4 case => //.
   have : (p %% 4 == 1) || (p %% 4 == 3).
     rewrite -[p]odd_double_half Op -modnDmr -muln2.
-    have /(_ _ 2)<- := muln_modl (isT: 0 < 2).
+    have /(_ _ _ 2)<- := muln_modl.
     by move: (_ %% 2) (ltn_pmod p./2 (isT: 0 < 2)); do 2 case => //.
   rewrite H -modnDm.
   by move: (F a) (F b) => /orP[] /eqP-> /orP[] /eqP->.

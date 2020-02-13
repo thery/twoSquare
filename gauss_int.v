@@ -1204,13 +1204,13 @@ have NxP : (0 < 'N x)%N.
   by apply: leq_trans NyLNx; rewrite ltnNge leqn0 normGI_eq0.
 rewrite (negPf nZy).
 have [r0|nZr0] := eqVneq (x %% y) 0.
-  by rewrite r0 egcdGI_rec0r !mul0r subr0 add0r mul1r eqxx.
+  by rewrite r0 egcdGI_rec0r !mul0r subr0 add0r mul1r.
 have NxyLn : ('N(x %% y)%GI <= n)%N.
   by rewrite -ltnS (leq_trans _ NyLn) // ltn_modGI.
 have NxyLNy : ('N (x %% y)%GI <= 'N y)%N by rewrite ltnW // ltn_modGI.
 have := IH _ _ nZr0 NxyLn NxyLNy.
 case: (egcdGI_rec _ _) => u v ->.
-by rewrite (negPf nZr0) /= /modGI mulrBr mulrBl addrCA mulrA.
+by rewrite /= /modGI mulrBr mulrBl addrCA mulrA.
 Qed.
 
 Lemma egcdGIP (x y : GI) : gcdGI x y = (egcdGI x y).1 * x + (egcdGI x y).2 * y.
