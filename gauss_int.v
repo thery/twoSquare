@@ -3,7 +3,7 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Import GRing.Theory Num.Theory UnityRootTheory.
+Import Order.TTheory GRing.Theory Num.Theory UnityRootTheory.
 Open Scope ring_scope.
 
 (** Starting from cyril exercise *)
@@ -149,9 +149,9 @@ have [mLe|eLm] := boolP (2%:R * (_ %% _)%Z <= `|_|).
 rewrite mulrDl opprD addrA {1}(divz_eq x y) [_ * _ + _]addrC addrK.
 have F := ltz_mod x yNz.
 rewrite -normrEsign ler0_norm; last first.
-  by rewrite subr_le0; apply: ltrW.
+  by rewrite subr_le0; apply: ltW.
 rewrite mulrN mulrBr opprB lter_sub_addl (_ : 2%:R = 1 + 1) //.
-by rewrite mulrDl mul1r ler_add // ltrW // ltrNge.
+by rewrite mulrDl mul1r ler_add // ltW // ltNge.
 Qed.
 
 End PreliminaryLemmas.
@@ -429,7 +429,8 @@ Proof.
 by rewrite /normGI [val _]algGI_nat gaussNormE normr_nat truncCX // natCK.
 Qed.
 
-Lemma normGIE (x : GI) : ('N(x) = truncC (`|'Re (val x)|) ^ 2 + truncC (`|'Im (val x)|) ^ 2)%N.
+Lemma normGIE (x : GI) : ('N(x) =  truncC (`|'Re (val x)|)%R ^ 2 +
+                                   truncC (`|'Im (val x)|)%R ^ 2)%N.
 Proof.
 rewrite /normGI gaussNormE normC2_Re_Im truncCD ?Cnat_exp_even //; last first.
   by rewrite qualifE Cnat_ge0 // Cnat_exp_even.
@@ -785,7 +786,7 @@ apply/idP/idP => [Ex|/dvdGIP[u ->]]; last first.
   by rewrite add0r addr0 expr1n (natCK 2) odd_mul negb_and orbT.
 apply/dvdGIP.
 have := algGIP x; rewrite qualifE => / andP[].
-have := Ex; rewrite normGIE odd_add !odd_exp /= negb_add.
+have := Ex; rewrite normGIE oddD !odd_exp /= negb_add.
 set m := 'Re _; set n := 'Im _ => /eqP Omn Cm Cn.
 suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInteger.
   exists (GIof FF); apply/val_eqP => /=.
@@ -1204,7 +1205,7 @@ have NxP : (0 < 'N x)%N.
   by apply: leq_trans NyLNx; rewrite ltnNge leqn0 normGI_eq0.
 rewrite (negPf nZy).
 have [r0|nZr0] := eqVneq (x %% y) 0.
-  by rewrite r0 egcdGI_rec0r !mul0r subr0 add0r mul1r.
+  by rewrite r0 egcdGI_rec0r /= !mul0r subr0 add0r mul1r.
 have NxyLn : ('N(x %% y)%GI <= n)%N.
   by rewrite -ltnS (leq_trans _ NyLn) // ltn_modGI.
 have NxyLNy : ('N (x %% y)%GI <= 'N y)%N by rewrite ltnW // ltn_modGI.
@@ -1302,19 +1303,19 @@ Proof.
 move=> xCint yCint xyLem.
 rewrite CnatEint rpredD // ?Cint_Cnat //=.
 have : `|x| ^+ 2 < (Posz m)%:~R ^+ 2.
-  apply: ltr_le_trans (_ : m%:R <= _).
-    apply: ler_lt_trans xyLem.
-    by rewrite ler_addl -realEsqr Creal_Cnat // Cnat_norm_Cint.
+  apply: lt_le_trans (_ : m%:R <= _).
+    apply: le_lt_trans xyLem.
+    by rewrite ler_addl // -realEsqr Creal_Cnat // Cnat_norm_Cint.
   rewrite -natrX ler_nat.
   by case: (m) => // m1; rewrite (leq_pexp2l _ (isT : (0 < 2)%N)).
 rewrite -{1}(floorCK xCint) -intr_norm -!rmorphX /= ltr_int.
 pose nD := [numDomainType of algC].
 case: m{xyLem} => [|m] //.
-rewrite -subr_gt0 subr_sqr pmulr_lgt0; last first.
-  apply: ltr_le_trans (_ : Posz m.+1 + 0 <= _) => //.
+rewrite -[in X in X -> _]subr_gt0 subr_sqr pmulr_lgt0; last first.
+  apply: lt_le_trans (_ : Posz m.+1 + 0 <= _) => //.
   by apply: ler_add.
 rewrite subr_gt0 lter_norml -!(ltr_int nD) floorCK //.
-rewrite -subr_gt0 rmorphN opprK => /andP[/ltrW].
+rewrite -subr_gt0 rmorphN opprK => /andP[/ltW].
 by rewrite -[x < _](ltr_add2r m.+1%:R) -natrD addnn => ->.
 Qed.
 
@@ -1330,11 +1331,11 @@ have := ltn_ordGI x.
 rewrite normGIE -(ltr_nat nD) natrD !natrX !truncCK ?Cnat_norm_Cint //.
 move => HH.
 have /andP[Hrx1 Lx1] := int_norm_nat (GIRe _) (GIIm _) HH.
-have F1 : (truncC ('Re (val (GI_of_ord x)) + n%:R) < n.*2)%N.
+have F1 : (truncC ('Re (val (GI_of_ord x)) + n%:R)%R < n.*2)%N.
   by rewrite -(ltr_nat nD) truncCK.
 rewrite addrC in HH.
 have /andP[Hrx2 Lx2] := int_norm_nat (GIIm _) (GIRe _) HH.
-have F2 : (truncC ('Im (val (GI_of_ord x)) + n%:R) < n.*2)%N.
+have F2 : (truncC ('Im (val (GI_of_ord x)) + n%:R)%R < n.*2)%N.
   by rewrite -(ltr_nat nD) truncCK.
 exists (Ordinal F1, Ordinal F2); rewrite ?mem_enum //=.
 apply/val_eqP=> /=.
