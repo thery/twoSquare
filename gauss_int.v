@@ -783,10 +783,10 @@ Proof.
 apply/idP/idP => [Ex|/dvdGIP[u ->]]; last first.
   rewrite normGIM {2}/normGI gaussNormE normC2_Re_Im.
   rewrite !raddfD /= Re_i Im_i (Creal_ReP _ _) // (Creal_ImP _ _) //.
-  by rewrite add0r addr0 expr1n (natCK 2) odd_mul negb_and orbT.
+  by rewrite add0r addr0 expr1n (natCK 2) oddM negb_and orbT.
 apply/dvdGIP.
 have := algGIP x; rewrite qualifE => / andP[].
-have := Ex; rewrite normGIE oddD !odd_exp /= negb_add.
+have := Ex; rewrite normGIE oddD !oddX /= negb_add.
 set m := 'Re _; set n := 'Im _ => /eqP Omn Cm Cn.
 suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInteger.
   exists (GIof FF); apply/val_eqP => /=.
@@ -1579,7 +1579,7 @@ Proof.
 move=> Cmn.
 rewrite coprimeGIE /eqGI dvd1GI andbT dvdGI1 -dvdn1.
 have/eqP<-: coprime (m ^ 2) (n ^ 2).
-  by rewrite coprime_expl // coprime_expr.
+  by rewrite coprimeXl // coprimeXr.
 by rewrite dvdn_gcd -!normGI_nat !dvdGI_norm // ?(dvdGI_gcdr,dvdGI_gcdl).
 Qed.
 
