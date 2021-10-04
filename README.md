@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/thery/twoSquare.svg?branch=master)](https://travis-ci.org/thery/twoSquare)
+[![Build Status](https://travis-ci.com/thery/twoSquare.svg?branch=master)](https://travis-ci.com/thery/twoSquare)
 
 
 # Two Square
