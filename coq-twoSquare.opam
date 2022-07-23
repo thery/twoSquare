@@ -36,7 +36,7 @@ sum2stest :
 
 reflect
     (forall p,  prime p -> odd p -> p %| n -> odd (logn p n) -> p %% 4 = 1)
-    (n \is a sum_of_two_square)."""
+    (n is a sum_of_two_square)."""
 
 build: [make "-j%{jobs}%"]
 install: [make "install"]
