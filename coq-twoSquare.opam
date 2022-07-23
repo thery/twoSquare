@@ -1,0 +1,57 @@
+# This file was generated from `meta.yml`, please do not edit manually.
+# Follow the instructions on https://github.com/coq-community/templates to regenerate.
+
+opam-version: "2.0"
+maintainer: "thery@sophia.inria.fr"
+version: "dev"
+
+homepage: "https://github.com/thery/twoSquare"
+dev-repo: "git+https://github.com/thery/twoSquare.git"
+bug-reports: "https://github.com/thery/twoSquare/issues"
+license: "MIT"
+
+synopsis: "A proof of Fermat's theorem on sum of two squares."
+description: """
+
+A proof of Fermat's theorem on sum of two squares.
+It is the proof that uses gaussian integers. This is done in ssreflect.
+It contains two files :
+
+********************************
+
+gauss_int.v : the definition of gaussian integers
+
+fermat2.v : the proof of Fermat's theorem
+
+********************************
+
+The final statement reads:
+
+From mathcomp.contrib.sum_of_two_square
+Require Import fermat2.
+
+Check sum2stest.
+
+sum2stest :
+
+reflect
+    (forall p,  prime p -> odd p -> p %| n -> odd (logn p n) -> p %% 4 = 1)
+    (n \is a sum_of_two_square)."""
+
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+depends: [
+  "coq" {(>= "8.15")}
+  "coq-mathcomp-ssreflect" {(>= "1.15.0")}
+  "coq-mathcomp-algebra" {(>= "1.15.0")}
+  "coq-mathcomp-field" {(>= "1.15.0")}
+]
+
+tags: [
+  "keyword:sum of two squares"
+  "keyword:fermat theorem"
+  "logpath:twoSquare"
+]
+authors: [
+  "Laurent Théry"
+]
