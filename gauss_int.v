@@ -92,7 +92,7 @@ Qed.
 Lemma algIm_div (x y : algC) : 
   'Im (x/y) = ('Re y * 'Im x - 'Re x * 'Im y) / `|y| ^+ 2.
 Proof.
-rewrite algImM algReV algImV addrC mulrN mulrA ['Re x * _]mulrA mulrBl.
+rewrite algImM algReV algImV addrC mulrN [_ * (_ / _)]mulrA mulrBl.
 by rewrite mulrAC.
 Qed.
 
@@ -489,7 +489,7 @@ transitivity (gaussNorm (val x) == 1).
   by rewrite gaussNormM gaussNorm1 Cnat_mul_eq1 //= => /andP [/eqP].
 rewrite (@mem_unity_roots _ 4 (map my [:: 1; -1; 'i; -'i])) //; last 2 first.
 - rewrite /= !unity_rootE /= [(- 'i) ^+ _]exprNn expr1n  -signr_odd ?expr0.
-  by rewrite -[4]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
+  by rewrite -[4%N]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
 - rewrite /= ![my _](iE, oneE, N1E, NiE).
   rewrite /= !in_cons !in_nil /= !negb_or -!andbA !andbT /=.
   rewrite ![_ + 'i * _ == _]eq_algC ?Re_rect ?Im_rect //.
@@ -517,7 +517,7 @@ Proof.
 rewrite normGI_eq1 unitGIE.
 rewrite (@mem_unity_roots _ 4 (map id [:: 1; -1; 'i; -'i])) //.
   rewrite /= !unity_rootE /= [(- 'i) ^+ _]exprNn expr1n  -signr_odd ?expr0.
-  by rewrite -[4]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
+  by rewrite -[4%N]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
 rewrite /= !in_cons !in_nil /= !negb_or -!andbA !andbT /= eqr_opp.
 rewrite -addr_eq0 (eqC_nat 2 0) andTb.
 rewrite algC_eqE (Creal_ImP _ _) // Im_i (eqC_nat 0 1) andbF andTb.

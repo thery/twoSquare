@@ -1,0 +1,84 @@
+---
+fullname: twoSquare
+shortname: twoSquare
+organization: thery
+community: false
+dune: false
+action: true
+
+synopsis: A proof of Fermat's theorem on sum of two squares.
+
+description: |-
+
+  A proof of Fermat's theorem on sum of two squares.
+  It is the proof that uses gaussian integers. This is done in ssreflect.
+  It contains two files :
+
+  ********************************
+
+  gauss_int.v : the definition of gaussian integers
+
+  fermat2.v : the proof of Fermat's theorem
+
+  ********************************
+
+  The final statement reads:
+
+  From mathcomp.contrib.sum_of_two_square
+  Require Import fermat2.
+
+  Check sum2stest.
+
+  sum2stest :
+  
+  reflect
+      (forall p,  prime p -> odd p -> p %| n -> odd (logn p n) -> p %% 4 = 1)
+      (n \is a sum_of_two_square).
+
+authors:
+- name: Laurent Théry
+
+maintainers:
+- name: Laurent Théry
+  nickname: thery
+
+opam-file-maintainer: thery@sophia.inria.fr
+
+license:
+  fullname: MIT License
+  identifier: MIT
+
+supported_coq_versions:
+  text: '8.15 or later'
+  opam: '{(>= "8.15")}'
+
+dependencies:
+- opam:
+    name: coq-mathcomp-ssreflect
+    version: '{(>= "1.15.0")}'
+  description: |-
+    [MathComp ssreflect 1.15 or later](https://math-comp.github.io)
+- opam:
+    name: coq-mathcomp-algebra
+    version: '{(>= "1.15.0")}'
+  description: |-
+    [MathComp algebra 1.15 or later](https://math-comp.github.io)
+
+- opam:
+    name: coq-mathcomp-field
+    version: '{(>= "1.15.0")}'
+  description: |-
+    [MathComp field 1.15 or later](https://math-comp.github.io)
+
+tested_coq_opam_versions:
+- version: '1.15.0-coq-8.15'
+  repo: 'mathcomp/mathcomp'
+
+namespace: twoSquare
+
+keywords:
+- name: sum of two squares
+- name: fermat theorem
+
+
+---
