@@ -146,12 +146,12 @@ move=> yNz; rewrite /cmodz /cdivz (negPf yNz) /=.
 have [mLe|eLm] := boolP (2%:R * (_ %% _)%Z <= `|_|).
   rewrite  {1}(divz_eq x y) [_ * _ + _]addrC addrK.
   by rewrite [`|(_ %% _)%Z|]ger0_norm // modz_ge0.
-rewrite mulrDl opprD addrA {1}(divz_eq x y) [_ * _ + _]addrC addrK.
+rewrite [_ * y]mulrDl opprD addrA {1}(divz_eq x y) [_ * _ + _]addrC addrK.
 have F := ltz_mod x yNz.
 rewrite -normrEsign ler0_norm; last first.
   by rewrite subr_le0; apply: ltW.
-rewrite mulrN mulrBr opprB lter_sub_addl (_ : 2%:R = 1 + 1) //.
-by rewrite mulrDl mul1r ler_add // ltW // ltNge.
+rewrite mulrN mulrBr opprB lterBDl (_ : 2%:R = 1 + 1) //.
+by rewrite mulrDl mul1r lerD // ltW // ltNge.
 Qed.
 
 End PreliminaryLemmas.
@@ -631,12 +631,12 @@ rewrite [(_ + _)%:~R]rmorphD /= rmorphM /= addrK.
 rewrite !gaussNormM gaussNormE normC2_rect ?(Creal_Cint, Cint_int) //.
 rewrite truncCM //; last by rewrite rpredD // Cnat_exp_even // Cint_int.
 rewrite mulnC ltn_pmul2l; last by rewrite lt0n normGI_eq0.
-rewrite -!rmorphX /= -!rmorphD /=.
+rewrite -!rmorphXn /= -!rmorphD /=.
 rewrite -[_ + _]gez0_abs ?natCK; last first.
   by rewrite addr_ge0 // exprn_even_ge0.
 set x1 := _ ^+ 2; set x2 := _ ^+ 2.
 apply: leq_ltn_trans (_ : (`|x1| + `|x2| < _)%N).
-  have := leq_add_dist (x1) (x1 - x2) (-x2).
+  have := leqD_dist (x1) (x1 - x2) (-x2).
   by rewrite !opprK subrK opprB [_ + (_ - _)]addrC subrK [(`|_| + _)%N]addnC.
 rewrite -(ltn_pmul2l (isT: (0 < 2 ^ 2)%N)) mulnDr.
 apply: leq_ltn_trans (_ : 2 * 'N y ^ 2 < _)%N; last first.
@@ -1305,18 +1305,18 @@ rewrite CnatEint rpredD // ?Cint_Cnat //=.
 have : `|x| ^+ 2 < (Posz m)%:~R ^+ 2.
   apply: lt_le_trans (_ : m%:R <= _).
     apply: le_lt_trans xyLem.
-    by rewrite ler_addl // -realEsqr Creal_Cnat // Cnat_norm_Cint.
+    by rewrite lerDl // -realEsqr Creal_Cnat // Cnat_norm_Cint.
   rewrite -natrX ler_nat.
   by case: (m) => // m1; rewrite (leq_pexp2l _ (isT : (0 < 2)%N)).
-rewrite -{1}(floorCK xCint) -intr_norm -!rmorphX /= ltr_int.
+rewrite -{1}(floorCK xCint) -intr_norm -!rmorphXn /= ltr_int.
 pose nD := [numDomainType of algC].
 case: m{xyLem} => [|m] //.
 rewrite -[in X in X -> _]subr_gt0 subr_sqr pmulr_lgt0; last first.
   apply: lt_le_trans (_ : Posz m.+1 + 0 <= _) => //.
-  by apply: ler_add.
+  by apply: lerD.
 rewrite subr_gt0 lter_norml -!(ltr_int nD) floorCK //.
 rewrite -subr_gt0 rmorphN opprK => /andP[/ltW].
-by rewrite -[x < _](ltr_add2r m.+1%:R) -natrD addnn => ->.
+by rewrite -[x < _](ltrD2r m.+1%:R) -natrD addnn => ->.
 Qed.
 
 Lemma mem_ordGI_enum x : x \in ordGI_enum.

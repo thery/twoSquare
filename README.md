@@ -43,16 +43,17 @@ reflect
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.15 or later
+- Compatible Coq versions: 8.17 or later
 - Additional dependencies:
-  - [MathComp ssreflect 1.15 or later](https://math-comp.github.io)
-  - [MathComp algebra 1.15 or later](https://math-comp.github.io)
-  - [MathComp field 1.15 or later](https://math-comp.github.io)
+  - [MathComp ssreflect 1.17 or later](https://math-comp.github.io)
+  - [MathComp algebra 1.17 or later](https://math-comp.github.io)
+  - [MathComp field 1.17 or later](https://math-comp.github.io)
 - Coq namespace: `twoSquare`
 - Related publication(s): none
 
 ## Building and installation instructions
 
+To build and install manually, do:
 
 ``` shell
 git clone https://github.com/thery/twoSquare.git
