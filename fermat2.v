@@ -1,4 +1,4 @@
-From mathcomp Require Import all_ssreflect all_algebra all_field.
+From mathcomp Require Import all_ssreflect all_algebra all_field archimedean.
 Require Import gauss_int.
 
 Set Implicit Arguments.
@@ -51,8 +51,8 @@ Proof.
 apply: (iffP idP) => [/sum2sP[m [n ->]]|[x1->]].
 exists (m%:R + iGI * n%:R)%R.
   by rewrite normGIE /= !algGI_nat Re_rect ?Im_rect 
-             ?CrealE ?conjC_nat ?natCK // !normr_nat !natCK.
-rewrite normGIE; set m := truncC _; set n := truncC _.
+             ?CrealE ?conjC_nat ?natrK // !normr_nat !natrK.
+rewrite normGIE; set m := Num.trunc _; set n := Num.trunc _.
 by apply/sum2sP; exists m; exists n.
 Qed.
 
@@ -84,7 +84,7 @@ have PGIp : primeGI (p%:R).
 pose z := (a%:R + iGI * b%:R)%R.
 have F : ('N z)%GI = a ^ 2 + b ^ 2.
   by rewrite normGIE /= !algGI_nat !(Re_rect, Im_rect)
-            ?Creal_Cnat // !normr_nat !natCK.
+            ?Rreal_nat // !normr_nat !natrK.
 have F1 : (p%:R %| z * conjGI z)%GI%R.
   rewrite conjGIM_norm F.
   case/dvdnP: pDab => q1 ->.
@@ -94,20 +94,20 @@ have []: ~ (p %| gcdn a b).
 rewrite dvdn_gcd.
 have [F2|] := boolP (p%:R %| z)%GI.
   have := dvdGI_nat_dvdz_Re F2.
-  rewrite Re_rect /= algGI_nat ?Creal_Cnat //=
-           (intCK (Posz a)) /= => ->.
+  rewrite Re_rect /= algGI_nat ?Rreal_nat //=
+           (intrKfloor (Posz a)) /= => ->.
   have := dvdGI_nat_dvdz_Im F2.
-  by rewrite Im_rect /= algGI_nat ?Creal_Cnat //=
-           (intCK (Posz b)).
+  by rewrite Im_rect /= algGI_nat ?Rreal_nat //=
+           (intrKfloor (Posz b)).
 rewrite -primeGI_coprime // => HH.
 have F2 : (p%:R %| conjGI z)%GI.
   by rewrite -(Gauss_dvdGIr _ HH).
 have := dvdGI_nat_dvdz_Re F2.
-rewrite Re_conj Re_rect /= algGI_nat ?Creal_Cnat //=
-           (intCK (Posz a)) => ->.
+rewrite Re_conj Re_rect /= algGI_nat ?Rreal_nat //=
+           (intrKfloor (Posz a)) => ->.
 have := dvdGI_nat_dvdz_Im F2.
-rewrite Im_conj Im_rect /= algGI_nat ?Creal_Cnat //=.
-by rewrite floorCN ?Cint_Cnat // abszN (intCK (Posz b)).
+rewrite Im_conj Im_rect /= algGI_nat ?Rreal_nat //=.
+by rewrite floorN ?intr_nat // abszN (intrKfloor (Posz b)).
 Qed.
 
 Lemma sum2sX x n :

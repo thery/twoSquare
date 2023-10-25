@@ -11,8 +11,6 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 
 
 
-
-
 A proof of Fermat's theorem on sum of two squares.
 It is the proof that uses gaussian integers. This is done in ssreflect.
 It contains two files :
@@ -43,11 +41,11 @@ reflect
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.17 or later
+- Compatible Coq versions: 8.18 or later
 - Additional dependencies:
-  - [MathComp ssreflect 1.17 or later](https://math-comp.github.io)
-  - [MathComp algebra 1.17 or later](https://math-comp.github.io)
-  - [MathComp field 1.17 or later](https://math-comp.github.io)
+  - [MathComp ssreflect 2.1 or later](https://math-comp.github.io)
+  - [MathComp algebra 2.1 or later](https://math-comp.github.io)
+  - [MathComp field 2.1 or later](https://math-comp.github.io)
 - Coq namespace: `twoSquare`
 - Related publication(s): none
 
