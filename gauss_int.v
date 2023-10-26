@@ -168,8 +168,10 @@ Section GaussIntegers.
 (**
 First we define a predicate for the algebraic numbers which are gauss integers.
 *)
-Definition gaussInteger  := 
-  [qualify a x : algC | ('Re x \is a Num.int) && ('Im x \is a Num.int)].
+Definition gaussInteger_subdef := 
+  [pred x : algC | ('Re x \is a Num.int) && ('Im x \is a Num.int)].
+
+Definition gaussInteger := [qualify a x | gaussInteger_subdef x].
 
 (**
 
@@ -178,7 +180,7 @@ Definition gaussInteger  :=
 *)
 Lemma Cint_GI (x : algC) : x \is a Num.int -> x \is a gaussInteger.
 Proof.
-move=> x_int; rewrite qualifE (Creal_ReP _ _) ?(Creal_ImP _ _) ?Rreal_int //.
+move=> x_int; rewrite qualifE /= (Creal_ReP _ _) ?(Creal_ImP _ _) ?Rreal_int //.
 by rewrite x_int rpred0.
 Qed.
 (**
@@ -189,12 +191,12 @@ Lemma GI_subring : subring_closed gaussInteger.
 Proof.
 split => [|x y /andP[??] /andP[??]|x y /andP[??] /andP[??]].
 - by rewrite Cint_GI.
-- by rewrite qualifE !raddfB /= ?rpredB.
-by rewrite qualifE algReM algImM rpredB ?rpredD // rpredM.
+- by rewrite qualifE /= !raddfB /= ?rpredB.
+by rewrite qualifE /= algReM algImM rpredB ?rpredD // rpredM.
 Qed.
 
 HB.instance Definition _ := 
-  GRing.isSubringClosed.Build _ _ GI_subring.
+  GRing.isSubringClosed.Build algC gaussInteger_subdef GI_subring.
 
 (**
 
@@ -299,7 +301,7 @@ HB.instance Definition _ :=
 *)
 Lemma conjGIE x : (x^* \is a gaussInteger) = (x \is a gaussInteger).
 Proof. 
-by rewrite ![_ \is a gaussInteger]qualifE Re_conj Im_conj rpredN.
+by rewrite ![_ \is a gaussInteger]qualifE /= Re_conj Im_conj rpredN.
 Qed.
 (**
 
@@ -764,7 +766,7 @@ by rewrite rmorphM.
 Qed.
 
 Fact iGI_proof : 'i \is a gaussInteger.
-Proof. by rewrite qualifE Re_i Im_i int_num0 int_num1. Qed.
+Proof. by rewrite qualifE /= Re_i Im_i int_num0 int_num1. Qed.
 
 Definition iGI := GIof iGI_proof.
 
@@ -785,7 +787,7 @@ suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInteger.
   rewrite -addrA [_ + (_ - _)]addrC subrK.
   have F u : (u * 2%:R = u + u) by rewrite mulrDr mulr1.
   by rewrite -!F !mulfK 1?[algGI x]algCrect ?(eqC_nat _ 0).
-rewrite qualifE Re_rect ?Im_rect; last 4 first.
+rewrite qualifE /= Re_rect ?Im_rect; last 4 first.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredB ?rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
