@@ -164,39 +164,44 @@ End PreliminaryLemmas.
  - Exercice 3.10. ENS Lyon
 
 *)
-Section GaussIntegers.
+Section gaussInts.
 (**
 First we define a predicate for the algebraic numbers which are gauss integers.
 *)
-Definition gaussInteger_subdef := 
-  [pred x : algC | ('Re x \is a Num.int) && ('Im x \is a Num.int)].
+Definition gaussInt_subdef : pred algC := 
+  [pred x | ('Re x \is a Num.int) && ('Im x \is a Num.int)].
 
-Definition gaussInteger := [qualify a x | gaussInteger_subdef x].
+Definition gaussInt := [qualify a x | gaussInt_subdef x].
+
+Lemma gaussIntE x : 
+  x \is a gaussInt = (('Re x \is a Num.int) && ('Im x \is a Num.int)).
+Proof. by []. Qed.
 
 (**
 
 ** Question 1: Prove that integers are gauss integers
 
 *)
-Lemma Cint_GI (x : algC) : x \is a Num.int -> x \is a gaussInteger.
+Lemma Cint_GI (x : algC) : x \is a Num.int -> x \is a gaussInt.
 Proof.
-move=> x_int; rewrite qualifE /= (Creal_ReP _ _) ?(Creal_ImP _ _) ?Rreal_int //.
+move=> x_int.
+rewrite !gaussIntE (Creal_ReP _ _) ?(Creal_ImP _ _) ?Rreal_int //.
 by rewrite x_int rpred0.
 Qed.
 (**
 
 ** Question 2: Prove that gauss integers form a subfield
 *)
-Lemma GI_subring : subring_closed gaussInteger.
+Lemma GI_subring : subring_closed gaussInt.
 Proof.
 split => [|x y /andP[??] /andP[??]|x y /andP[??] /andP[??]].
 - by rewrite Cint_GI.
-- by rewrite qualifE /= !raddfB /= ?rpredB.
-by rewrite qualifE /= algReM algImM rpredB ?rpredD // rpredM.
+- by rewrite gaussIntE !raddfB /= ?rpredB.
+by rewrite gaussIntE algReM algImM rpredB ?rpredD // rpredM.
 Qed.
 
 HB.instance Definition _ := 
-  GRing.isSubringClosed.Build algC gaussInteger_subdef GI_subring.
+  GRing.isSubringClosed.Build algC gaussInt_subdef GI_subring.
 
 (**
 
@@ -206,7 +211,7 @@ algebraic numbers. We soon prove that this is in fact a sub type.
 *)
 Record GI := GIof {
   algGI : algC;
-  algGIP : algGI \is a gaussInteger }.
+  algGIP : algGI \is a gaussInt }.
 (** We make the defining property of GI a Hint *)
 Hint Resolve algGIP : core.
 (**
@@ -235,7 +240,7 @@ Definition ImGI x := GIof (Cint_GI (GIIm x)).
 (**
 
 We provide a ring structure to the type GI, using the subring
-canonical property for the predicate gaussInteger
+canonical property for the predicate gaussInt
 
 *)
 
@@ -262,7 +267,7 @@ HB.instance Definition _ := [SubRing_isSubComRing of GI by <:].
 
 *)
 Definition invGI (x : GI) := insubd x (val x)^-1.
-Definition unitGI (x : GI) := (x != 0) && ((val x)^-1 \is a gaussInteger).
+Definition unitGI (x : GI) := (x != 0) && ((val x)^-1 \is a gaussInt).
 (**
 
 ** Question 3: prove a few facts in order to find a comUnitRingMixin
@@ -299,16 +304,16 @@ HB.instance Definition _ :=
 ** Question 4: Show that gauss integers are stable by conjugation.
 
 *)
-Lemma conjGIE x : (x^* \is a gaussInteger) = (x \is a gaussInteger).
+Lemma conjGIE x : (x^* \is a gaussInt) = (x \is a gaussInt).
 Proof. 
-by rewrite ![_ \is a gaussInteger]qualifE /= Re_conj Im_conj rpredN.
+by rewrite gaussIntE Re_conj Im_conj rpredN.
 Qed.
 (**
 
 We use this fact to build the conjugation of a gauss Integers
 
 *)
-Fact conjGI_subproof (x : GI) : (val x)^* \is a gaussInteger.
+Fact conjGI_subproof (x : GI) : (val x)^* \is a gaussInt.
 Proof. by rewrite conjGIE. Qed.
 
 Canonical conjGI x := GIof (conjGI_subproof x).
@@ -428,6 +433,7 @@ rewrite /normGI gaussNormE normC2_Re_Im truncD ?natr_exp_even //; last first.
   by rewrite qualifE /= natr_ge0 // natr_exp_even.
 by rewrite -!truncX ?natr_norm_int // !intr_normK.
 Qed.
+
 Lemma truncC_Cint (x : algC) :
   x \is a Num.int -> x = (-1) ^+ (x < 0)%R * (Num.trunc `|x|)%:R.
 Proof.
@@ -527,8 +533,8 @@ Qed.
 HB.instance Definition _ := GRing.ComUnitRing_isIntegral.Build GI
                                     GI_idomainAxiom.
 
-Fact divGI_subproof (x y : int) : x%:~R + 'i * y%:~R \is a gaussInteger.
-Proof. by rewrite qualifE /= Re_rect ?Im_rect ?Rreal_int ?intr_int. Qed.
+Fact divGI_subproof (x y : int) : x%:~R + 'i * y%:~R \is a gaussInt.
+Proof. by rewrite gaussIntE Re_rect ?Im_rect ?Rreal_int ?intr_int. Qed.
 
 Definition divGI (x y : GI) : GI :=
   let zr := Num.floor ('Re (val x) * 'Re (val y) + 'Im (val x) * 'Im (val y)) in
@@ -765,8 +771,8 @@ case/dvdGIP=> q ->; apply/dvdGIP; exists (conjGI q).
 by rewrite rmorphM.
 Qed.
 
-Fact iGI_proof : 'i \is a gaussInteger.
-Proof. by rewrite qualifE /= Re_i Im_i int_num0 int_num1. Qed.
+Fact iGI_proof : 'i \is a gaussInt.
+Proof. by rewrite gaussIntE Re_i Im_i int_num0 int_num1. Qed.
 
 Definition iGI := GIof iGI_proof.
 
@@ -780,14 +786,14 @@ apply/dvdGIP.
 have := algGIP x; rewrite qualifE => / andP[].
 have := Ex; rewrite normGIE oddD !oddX /= negb_add.
 set m := 'Re _; set n := 'Im _ => /eqP Omn Cm Cn.
-suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInteger.
+suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInt.
   exists (GIof FF); apply/val_eqP => /=.
   rewrite -{2}['i]mulr1 mulC_rect !mulr1 mul1r -mulrBl -mulrDl.
   rewrite opprB [_  + (m - n)]addrC addrA subrK.
   rewrite -addrA [_ + (_ - _)]addrC subrK.
   have F u : (u * 2%:R = u + u) by rewrite mulrDr mulr1.
   by rewrite -!F !mulfK 1?[algGI x]algCrect ?(eqC_nat _ 0).
-rewrite qualifE /= Re_rect ?Im_rect; last 4 first.
+rewrite gaussIntE Re_rect ?Im_rect; last 4 first.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredB ?rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
@@ -1847,7 +1853,7 @@ by rewrite eqGI_sym mulGI_gcdl.
 Qed.
 
 
-End GaussIntegers.
+End gaussInts.
 
 Declare Scope GI_scope.
 Delimit Scope GI_scope with GI.
