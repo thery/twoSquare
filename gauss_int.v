@@ -223,6 +223,7 @@ We provide the subtype property.
 
 *)
 
+#[verbose]
 HB.instance Definition _ := [isSub for algGI].
 
 (**
@@ -244,12 +245,11 @@ canonical property for the predicate gaussInt
 
 *)
 
-HB.instance Definition _ := [Equality of GI by <:].
-HB.instance Definition _ := [Choice of GI by <:].
+HB.howto GI subComRingType.
+
 HB.instance Definition _ := [Countable of GI by <:].
-HB.instance Definition _ := [SubChoice_isSubZmodule of GI by <:].
-HB.instance Definition _ := [SubZmodule_isSubRing of GI by <:].
-HB.instance Definition _ := [SubRing_isSubComRing of GI by <:].
+HB.instance Definition _ := [SubChoice_isSubComRing of GI by <:].
+
 (**
 
  - Now we build the unitRing and comUnitRing structure of gauss
@@ -1259,8 +1259,6 @@ Coercion GI_of_ord i := let: OrdinalGI m _ := i in m.
 
 
 HB.instance Definition _ := [isSub for GI_of_ord].
-HB.instance Definition _ := [Equality of ordinalGI by <:].
-HB.instance Definition _ := [Choice of ordinalGI by <:].
 HB.instance Definition _ := [Countable of ordinalGI by <:].
 
 Lemma ltn_ordGI (i : ordinalGI) : ('N i < n)%N.
