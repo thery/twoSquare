@@ -914,7 +914,7 @@ rewrite ltnS leqn0 normGI_eq0 => /eqP->.
 by rewrite modGI0 gcdGI0.
 Qed.
 
-Lemma gcdGIxx : idempotent gcdGI.
+Lemma gcdGIxx : idempotent_op gcdGI.
 Proof. by move=> x; rewrite gcdGIE ltnn modGIxx gcd0GI. Qed.
 
 Lemma dvdGI_mod d x y : d %| x -> (d %| y) = (d %| y %% x).

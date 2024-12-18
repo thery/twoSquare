@@ -6,8 +6,10 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 
 [![Docker CI][docker-action-shield]][docker-action-link]
 
-[docker-action-shield]: https://github.com/thery/twoSquare/workflows/Docker%20CI/badge.svg?branch=master
-[docker-action-link]: https://github.com/thery/twoSquare/actions?query=workflow:"Docker%20CI"
+[docker-action-shield]: https://github.com/thery/twoSquare/actions/workflows/docker-action.yml/badge.svg?branch=master
+[docker-action-link]: https://github.com/thery/twoSquare/actions/workflows/docker-action.yml
+
+
 
 
 
@@ -41,11 +43,11 @@ reflect
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.18 or later
+- Compatible Coq versions: 8.20 or later
 - Additional dependencies:
-  - [MathComp ssreflect 2.1 or later](https://math-comp.github.io)
-  - [MathComp algebra 2.1 or later](https://math-comp.github.io)
-  - [MathComp field 2.1 or later](https://math-comp.github.io)
+  - [MathComp ssreflect 2.3 or later](https://math-comp.github.io)
+  - [MathComp algebra 2.3 or later](https://math-comp.github.io)
+  - [MathComp field 2.3 or later](https://math-comp.github.io)
 - Coq namespace: `twoSquare`
 - Related publication(s): none
 
