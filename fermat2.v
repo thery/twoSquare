@@ -52,7 +52,7 @@ apply: (iffP idP) => [/sum2sP[m [n ->]]|[x1->]].
 exists (m%:R + iGI * n%:R)%R.
   by rewrite normGIE /= !algGI_nat Re_rect ?Im_rect 
              ?CrealE ?conjC_nat ?natrK // !normr_nat !natrK.
-rewrite normGIE; set m := Num.trunc _; set n := Num.trunc _.
+rewrite normGIE; set m := Num.truncn _; set n := Num.truncn _.
 by apply/sum2sP; exists m; exists n.
 Qed.
 
@@ -191,7 +191,7 @@ have pE : p = (k * 4).+1 by rewrite (divn_eq p 4) (eqP pM4) addn1.
 rewrite pE => F.
 have [/eqP-> _|] := boolP (k == 0); first exact: sum2s1.
 rewrite -leqn0 -ltnNge => Pk.
-rewrite fact_prod (big_cat_nat _ _ _ (_ : 1 <= (k * 2).+1)) //=; last first.
+rewrite fact_prod (big_cat_nat (_ : 1 <= (k * 2).+1)) //=; last first.
   by rewrite ltnS leq_mul2l orbT.
 set S1 := \prod_(_ <= _ < _ ) _.
 rewrite -addn1 -modnDml -modnMmr big_nat_rev /=.
