@@ -43,10 +43,9 @@ reflect
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Rocq/Coq versions: 9.0 or later
 - Additional dependencies:
-  - [MathComp ssreflect 2.4 or later](https://math-comp.github.io)
-  - [MathComp algebra 2.4 or later](https://math-comp.github.io)
+  - [MathComp ssreflect 2.5 or later](https://math-comp.github.io)
+  - [MathComp algebra 2.5 or later](https://math-comp.github.io)
   - [MathComp field 2.4 or later](https://math-comp.github.io)
 - Rocq/Coq namespace: `twoSquare`
 - Related publication(s): none

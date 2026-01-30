@@ -1,4 +1,4 @@
-From mathcomp Require Import all_ssreflect all_algebra all_field archimedean.
+From mathcomp Require Import all_boot all_algebra all_field archimedean.
 Require Import gauss_int.
 
 Set Implicit Arguments.

@@ -1,5 +1,5 @@
 From HB Require Import structures.
-From mathcomp Require Import all_ssreflect all_algebra all_field.
+From mathcomp Require Import all_boot all_order all_algebra all_field.
 From mathcomp Require Import archimedean.
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -63,7 +63,7 @@ have [|/mulfV H] := boolP (x^* == 0).
 rewrite -{1}[_ ^-1]mul1r -H -mulrA -invfM.
 rewrite {1}[x]algCrect conjC_rect ?Creal_Re ?Creal_Im //.
 have F : (x^* * x)^-1 \is Creal.
-  by rewrite rpredV CrealE rmorphM conjCK mulrC.
+  by rewrite rpredV CrealE rmorphM /= conjCK mulrC.
 rewrite mulrBl -mulrN -['i * _ * _]mulrA Re_rect ?normCKC //.
   by rewrite rpredM ?Creal_Re.
 by rewrite mulrN rpredN rpredM  // Creal_Im.
@@ -77,7 +77,7 @@ have [|/mulfV H] := boolP (x^* == 0).
 rewrite -{1}[_ ^-1]mul1r -H -mulrA -invfM.
 rewrite {1}[x]algCrect conjC_rect ?Creal_Re ?Creal_Im //.
 have F : (x^* * x)^-1 \is Creal.
-  by rewrite rpredV CrealE rmorphM conjCK mulrC.
+  by rewrite rpredV CrealE rmorphM /= conjCK mulrC.
 rewrite mulrBl -mulrN -['i * _ * _]mulrA Im_rect ?normCKC //.
 - by rewrite mulrN.
 - by rewrite rpredM ?Creal_Re.
@@ -319,13 +319,13 @@ Canonical conjGI x := GIof (conjGI_subproof x).
 Fact conjGI_sub : {morph conjGI : a b / a - b}.
 Proof. by move=> a b; apply/val_eqP; rewrite /= raddfB. Qed.
 
-HB.instance Definition _ := GRing.isAdditive.Build GI GI conjGI conjGI_sub.
+HB.instance Definition _ := GRing.isZmodMorphism.Build GI GI conjGI conjGI_sub.
 
-Fact conjGI_multiplicative : multiplicative conjGI.
-Proof. by split=> [a b|]; apply/val_eqP; rewrite /= ?(rmorphM,rmorph1). Qed.
+Fact conjGI_monoid_morphism : monoid_morphism conjGI.
+Proof. by split=> [|a b]; apply/val_eqP; rewrite /= ?(rmorphM,rmorph1). Qed.
 
 HB.instance Definition _ :=
-  GRing.isMultiplicative.Build GI GI conjGI conjGI_multiplicative.
+  GRing.isMonoidMorphism.Build GI GI conjGI conjGI_monoid_morphism.
 
 Lemma algGI_nat n : algGI n%:R = n%:R.
 Proof. by elim: n => //= n IH; rewrite -addn1 !natrD -IH. Qed.
@@ -623,7 +623,7 @@ rewrite [_ * _%:R]algCrect -UxRe -UyIm [_ * _%:R]mulrDl -['i * _ * _]mulrA.
 rewrite {1}(cdivz_eq Ux ('N y)) {1}(cdivz_eq Uy ('N y)).
 rewrite subC_rect ![_ + cmodz _ _]addrC.
 rewrite rmorphD /= rmorphM /= addrK.
-rewrite [(_ + _)%:~R]rmorphD /= rmorphM /= addrK.
+rewrite [(cmodz _ _ + _)%:~R]rmorphD /= rmorphM /= addrK.
 rewrite !gaussNormM gaussNormE normC2_rect ?(Rreal_int, intr_int) //.
 rewrite truncnM //; last by rewrite rpredD // natr_exp_even // intr_int.
 rewrite mulnC ltn_pmul2l; last by rewrite lt0n normGI_eq0.
