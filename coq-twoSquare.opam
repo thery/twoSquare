@@ -42,9 +42,9 @@ build: [make "-j%{jobs}%"]
 install: [make "install"]
 depends: [
   "coq" 
-  "rocq-mathcomp-ssreflect" {(>= "2.5.0")}
-  "rocq-mathcomp-algebra" {(>= "2.5.0")}
-  "rocq-mathcomp-field" {(>= "2.5.0")}
+  "rocq-mathcomp-ssreflect" {(>= "2.6.0")}
+  "rocq-mathcomp-algebra" {(>= "2.6.0")}
+  "rocq-mathcomp-field" {(>= "2.6.0")}
 ]
 
 tags: [
