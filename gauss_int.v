@@ -1,5 +1,5 @@
 From HB Require Import structures.
-From mathcomp Require Import all_boot all_order all_algebra all_field.
+From mathcomp Require Import boot order algebra field.
 From mathcomp Require Import archimedean.
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -79,9 +79,9 @@ rewrite {1}[x]algCrect conjC_rect ?Creal_Re ?Creal_Im //.
 have F : (x^* * x)^-1 \is Creal.
   by rewrite rpredV CrealE rmorphM /= conjCK mulrC.
 rewrite mulrBl -mulrN -['i * _ * _]mulrA Im_rect ?normCKC //.
-- by rewrite mulrN.
 - by rewrite rpredM ?Creal_Re.
-by rewrite mulrN rpredN rpredM  // Creal_Im.
+- by rewrite mulrN rpredN rpredM  // Creal_Im.
+by rewrite mulrN.
 Qed.
 
 Lemma algRe_div (x y : algC) : 
@@ -149,7 +149,7 @@ have [mLe|eLm] := boolP (2%:R * (_ %% _)%Z <= `|_|).
   by rewrite [`|(_ %% _)%Z|]ger0_norm // modz_ge0.
 rewrite [_ * y]mulrDl opprD addrA {1}(divz_eq x y) [_ * _ + _]addrC addrK.
 have F := ltz_mod x yNz.
-rewrite -normrEsign ler0_norm; last first.
+rewrite -normrEsign ler0_norm.
   by rewrite subr_le0; apply: ltW.
 rewrite mulrN mulrBr opprB lterBDl (_ : 2%:R = 1 + 1) //.
 by rewrite mulrDl mul1r lerD // ltW // ltNge.
@@ -174,7 +174,7 @@ Definition gaussInt_subdef : pred algC :=
 Definition gaussInt := [qualify a x | gaussInt_subdef x].
 
 Lemma gaussIntE x : 
-  x \is a gaussInt = (('Re x \is a Num.int) && ('Im x \is a Num.int)).
+  (x \is a gaussInt) = (('Re x \is a Num.int) && ('Im x \is a Num.int)).
 Proof. by []. Qed.
 
 (**
@@ -427,7 +427,7 @@ Qed.
 Lemma normGIE (x : GI) : ('N(x) =  Num.truncn (`|'Re (val x)|)%R ^ 2 +
                                    Num.truncn (`|'Im (val x)|)%R ^ 2)%N.
 Proof.
-rewrite /normGI gaussNormE normC2_Re_Im truncnD ?natr_exp_even //; last first.
+rewrite /normGI gaussNormE normC2_Re_Im truncnD ?natr_exp_even //.
   by rewrite qualifE /= natr_ge0 // natr_exp_even.
 by rewrite -!truncnX ?natr_norm_int // !intr_normK.
 Qed.
@@ -483,7 +483,7 @@ transitivity (gaussNorm (val x) == 1).
     by move=> gNx; apply/unitrPr; exists (conjGI x); apply: val_inj.
   move=> x_unit; have /(congr1 (gaussNorm \o val)) /= /eqP := mulrV x_unit.
   by rewrite gaussNormM gaussNorm1 Cnat_mul_eq1 //= => /andP [/eqP].
-rewrite (@mem_unity_roots _ 4 (map my [:: 1; -1; 'i; -'i])) //; last 2 first.
+rewrite (@mem_unity_roots _ 4 (map my [:: 1; -1; 'i; -'i])) //.
 - rewrite /= !unity_rootE /= [(- 'i) ^+ _]exprNn expr1n  -signr_odd ?expr0.
   by rewrite -[4%N]/(2 * 2)%N exprM sqrCi -signr_odd ?expr0 mulr1 !eqxx.
 - rewrite /= ![my _](iE, oneE, N1E, NiE).
@@ -608,13 +608,13 @@ set Uy := Num.floor _.
 have UxRe : Ux%:~R = 'Re (algGI x / algGI y * ('N y)%:R).
   rewrite algReM ['Re _%:R](Creal_ReP _ _) ?qualifE /= ?ler0n //.
   rewrite ?['Im _%:R](Creal_ImP _ _) ?qualifE /= ?ler0n // mulr0 subr0.
-  rewrite /normGI truncnK // algRe_div -gaussNormE divfK; last first.
+  rewrite /normGI truncnK // algRe_div -gaussNormE divfK.
     by rewrite gaussNorm_eq0.
   by rewrite floorK // rpredD // rpredM.
 have UyIm : Uy%:~R = 'Im (algGI x / algGI y * ('N(y))%GI%:R).
   rewrite algImM ['Re _%:R](Creal_ReP _ _) ?qualifE /= ?ler0n //.
   rewrite ?['Im _%:R](Creal_ImP _ _) ?qualifE /= ?ler0n // mulr0 add0r mulrC.
-  rewrite /normGI truncnK // algIm_div -gaussNormE divfK; last first.
+  rewrite /normGI truncnK // algIm_div -gaussNormE divfK.
     by rewrite gaussNorm_eq0.
   by rewrite floorK // rpredB // rpredM.
 rewrite ['N (_ * _)]/normGI /= -[algGI x](divfK yNz).
@@ -625,10 +625,10 @@ rewrite subC_rect ![_ + cmodz _ _]addrC.
 rewrite rmorphD /= rmorphM /= addrK.
 rewrite [(cmodz _ _ + _)%:~R]rmorphD /= rmorphM /= addrK.
 rewrite !gaussNormM gaussNormE normC2_rect ?(Rreal_int, intr_int) //.
-rewrite truncnM //; last by rewrite rpredD // natr_exp_even // intr_int.
-rewrite mulnC ltn_pmul2l; last by rewrite lt0n normGI_eq0.
+rewrite truncnM //; first by rewrite rpredD // natr_exp_even // intr_int.
+rewrite mulnC ltn_pmul2l; first by rewrite lt0n normGI_eq0.
 rewrite -!rmorphXn /= -!rmorphD /=.
-rewrite -[_ + _]gez0_abs ?natrK; last first.
+rewrite -[_ + _]gez0_abs ?natrK.
   by rewrite addr_ge0 // exprn_even_ge0.
 set x1 := _ ^+ 2; set x2 := _ ^+ 2.
 apply: leq_ltn_trans (_ : (`|x1| + `|x2| < _)%N).
@@ -737,7 +737,7 @@ Proof.
 case/dvdGIP=> q /val_eqP/eqP /(congr1 (fun x => Re x)) /=.
 case: x => /= ax; rewrite qualifE => /andP[Rx Ix].
 case: q => /= aq; rewrite qualifE => /andP[Rq Iq].
-rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Re_rect; last 2 first.
+rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Re_rect.
   by rewrite rpredM // Rreal_int // intr_nat.
   by rewrite rpredM // Rreal_int // intr_nat.
 move=> /(congr1 Num.norm) /eqP.
@@ -753,7 +753,7 @@ Proof.
 case/dvdGIP=> q /val_eqP/eqP/(congr1 (fun x => Im x)) /=.
 case: x => /= ax; rewrite qualifE => /andP[Rx Ix].
 case: q => /= aq; rewrite qualifE => /andP[Rq Iq].
-rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Im_rect; last 2 first.
+rewrite [aq]algCrect mulrDl algGI_nat -['i * _ * _]mulrA Im_rect.
   by rewrite rpredM // Rreal_int // intr_nat.
   by rewrite rpredM // Rreal_int // intr_nat.
 move=> /(congr1 Num.norm) /eqP.
@@ -791,7 +791,7 @@ suff FF : (n + m)/2%:R + 'i * ((n - m)/2%:R) \is a gaussInt.
   rewrite -addrA [_ + (_ - _)]addrC subrK.
   have F u : (u * 2%:R = u + u) by rewrite mulrDr mulr1.
   by rewrite -!F !mulfK 1?[algGI x]algCrect ?(eqC_nat _ 0).
-rewrite gaussIntE Re_rect ?Im_rect; last 4 first.
+rewrite gaussIntE Re_rect ?Im_rect.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredB ?rpredD ?Rreal_int.
 - by rewrite !(rpredM, rpredV) 1? rpredD ?Rreal_int.
@@ -1305,7 +1305,7 @@ pose nD := (Num.NumDomain.clone _ algC).
 rewrite lter_norml -2!(ler_int nD) floorK /= // in Hy.
 case/andP: Hy => Hy1 Hy2.
 rewrite -subr_ge0 /= -rmorphN /= opprK in Hy1.
-rewrite (le_trans (_ : 0 <= x + m%:R) _) //=; last by rewrite lerD2l ler_nat.
+rewrite (le_trans (_ : 0 <= x + m%:R) _) //=; first by rewrite lerD2l ler_nat.
 rewrite -addnn natrD ltrD2r.
 by rewrite (le_lt_trans (_ : x <= m%:R) _) //= ltr_nat.
 Qed.
@@ -1694,7 +1694,7 @@ Proof.
 move=> Pp nZx; set k := logGI p x.
 have Dk : p ^+ k %| x by rewrite pfactor_dvdGI.
 exists (x %/ p ^+ k); last by rewrite divGIK.
-rewrite primeGI_coprime // -(@dvdGI_mul2r (p ^+ k)); last first.
+rewrite primeGI_coprime // -(@dvdGI_mul2r (p ^+ k)).
   by apply: expf_neq0 (primeGI_neq0 Pp).
 by rewrite -exprS divGIK // pfactor_dvdGI // ltnn.
 Qed.
@@ -1719,7 +1719,7 @@ have yDpn : y %| p ^+ n by rewrite pnE dvdGI_mulr ?dvdGIxx.
 suff: y %= 1.
   rewrite /eqGI dvd1GI dvdGI1 andbT => /eqP Ny.
   have /eqP := congr1 normGI pnE; rewrite normGIM Ny mul1n.
-  rewrite !normGIX eqn_exp2l; last by case/primeGIP: Pp.
+  rewrite !normGIX eqn_exp2l; first by case/primeGIP: Pp.
   by move/eqP<-.
 elim: (n) yDpn => [|n1 IH]; first by rewrite expr0 /eqGI dvd1GI andbT.
 by rewrite exprS Gauss_dvdGIr // coprimeGI_sym.
@@ -1823,9 +1823,9 @@ have F1 : m1 %= gcdGI m1 p1 * gcdGI m1 q1.
     by move: Cmn; rewrite coprimeGI_mull => /andP[].
   rewrite -ltnS (leq_trans _ mL) // ltnS normGIM normGIX.
   rewrite -{1}['N m1]muln1 ltn_mul2l -{2}(expn0 ('N v)) ltn_exp2l //.
-    rewrite logGI_gt0 mem_primesGI Pv nZm pdivGI_dvd.
-    by move: OLNm; rewrite normGIM; case: ('N _).
-  by case/primeGIP: Pv.
+    by case/primeGIP: Pv.
+  rewrite logGI_gt0 mem_primesGI Pv nZm pdivGI_dvd.
+  by move: OLNm; rewrite normGIM; case: ('N _).
 have F2 : gcdGI (m1 * u2) p1 %= gcdGI m1 p1.
   apply: eqGI_trans (gcdGIC _ _) _.
   apply: eqGI_trans (Gauss_gcdGIl _ _) _ => //.

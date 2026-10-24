@@ -1,4 +1,4 @@
-From mathcomp Require Import all_boot all_algebra all_field archimedean.
+From mathcomp Require Import boot algebra field archimedean.
 Require Import gauss_int.
 
 Set Implicit Arguments.
@@ -166,7 +166,7 @@ by rewrite modnMml -modnMmr => /eqP->; rewrite modnMmr.
 Qed.
 
 Lemma sum2sprime p : 
-  odd p -> prime p -> p \is a sum_of_two_square = (p %% 4 == 1).
+  odd p -> prime p -> (p \is a sum_of_two_square) = (p %% 4 == 1).
 Proof.
 move=> Op Pp; apply/idP/idP=>[/sum2sP[a [b H]]|pM4].
   have F c : (c ^ 2 %% 4 == 0) || (c ^ 2 %% 4 == 1).
@@ -191,7 +191,7 @@ have pE : p = (k * 4).+1 by rewrite (divn_eq p 4) (eqP pM4) addn1.
 rewrite pE => F.
 have [/eqP-> _|] := boolP (k == 0); first exact: sum2s1.
 rewrite -leqn0 -ltnNge => Pk.
-rewrite fact_prod (big_cat_nat (_ : 1 <= (k * 2).+1)) //=; last first.
+rewrite fact_prod (big_cat_nat (_ : 1 <= (k * 2).+1)) //=.
   by rewrite ltnS leq_mul2l orbT.
 set S1 := \prod_(_ <= _ < _ ) _.
 rewrite -addn1 -modnDml -modnMmr big_nat_rev /=.
